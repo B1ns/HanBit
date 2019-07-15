@@ -24,8 +24,9 @@ class MainActivity : AppCompatActivity() {
     val webURL : String = "https://www.hanlight.kr"
     val PICKFILE_REQUEST_CODE = 100
 
+
     private var mUploadMessage: ValueCallback<Uri>? = null
-    private val FILECHOOSER_RESULTCODE = 1
+    private val FILECHOOSER_RESULTCODE = 100
 
 
     @SuppressLint("SetJavaScriptEnabled")
@@ -52,32 +53,13 @@ class MainActivity : AppCompatActivity() {
 
         webView.webChromeClient = object:WebChromeClient() {
             override fun onShowFileChooser(webView: WebView, filePathCallback: ValueCallback<Array<Uri>>, fileChooserParams:FileChooserParams):Boolean {
-                var mFilePathCallback = filePathCallback
                 val intent = Intent(Intent.ACTION_GET_CONTENT)
-                intent.type = "*/*"
+                intent.type = "image/*"
                 startActivityForResult(intent, PICKFILE_REQUEST_CODE)
                 return true
             }
         }
 
-
-        fun onActivityResult(requestCode: Int, resultCode: Int,
-                             intent: Intent,
-                             mFilePathCallback: Any): Boolean {
-            var PICKFILE_REQUEST_CODE = null
-            if (requestCode == PICKFILE_REQUEST_CODE)
-            {
-                val result = if (resultCode != RESULT_OK)
-                    null
-                else
-                    intent.data
-                val resultsArray = arrayOfNulls<Uri>(1)
-                resultsArray[0] = result
-                mFilePathCallback.onReceiveValue(resultsArray)
-
-            }
-            return true
-        }
 
 
         webView.setDownloadListener { url, userAgent, contentDisposition, mimetype, contentLength ->
